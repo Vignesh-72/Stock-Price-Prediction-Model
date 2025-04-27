@@ -106,11 +106,6 @@ Use GitHub and GitHub Actions for version control and CI/CD automation.
 
 ---
 
-## 📄 License
-This project is licensed under the [MIT License](LICENSE).
-
----
-
 ## 🙌 Acknowledgements
 - [Yahoo Finance](https://finance.yahoo.com/) for stock data.
 - [Streamlit](https://streamlit.io/) for the dashboard framework.
