@@ -1,27 +1,117 @@
-# Stock-Price-Prediction-Model
+# Stock Price Prediction Model
 
-![Stock Prediction Visualization](https://img.shields.io/badge/Python-3.8%2B-blue) ![Framework](https://img.shields.io/badge/Framework-Streamlit-red)
+## 📈 Project Overview
+Stock market prediction is a complex task due to rapid and unpredictable price changes.  
+This project uses machine learning models to predict:
+- **The next day's closing stock price** (Regression)
+- **The direction of price movement (Up/Down)** (Classification)  
 
-A machine learning application that predicts next-day stock prices and movement direction using technical indicators.
+It aims to assist financial analysts and investors by uncovering hidden patterns using historical data and technical indicators.
 
-## Key Features
-- 📈 Predicts next day's closing price (Regression)
-- 🔮 Forecasts price movement direction (Up/Down Classification)
-- 📊 Interactive visualizations of trends and predictions
-- 🎛️ Customizable technical indicators (RSI, Moving Averages)
-- 🚀 Real-time predictions using Yahoo Finance data
+---
 
-## How It Works
-1. **Data Collection**: Fetches stock data using `yfinance` API
-2. **Feature Engineering**: Calculates technical indicators:
-   - Lag features (previous day prices)
-   - Moving Averages (5-day, 20-day)
-   - Relative Strength Index (RSI)
-3. **Machine Learning**:
-   - Regression: Random Forest for price prediction
-   - Classification: Logistic Regression for direction prediction
-4. **Visualization**: Streamlit dashboard displays:
-   - Actual vs Predicted prices
-   - Buy/Sell signals
-   - Accuracy metrics
+## 🎯 Objectives
+- **Simplify Stock Movement Predictions**  
+Predict stock price trends using past data and technical indicators.
+- **Predict Future Prices**  
+Build a regression model to forecast the next day’s closing price.
+- **Classification Model**  
+Predict if the stock price will move up or down.
+- **Interactive Frontend Dashboard**  
+Allow users to input stock tickers and view real-time predictions.
+- **Collaborative Development**  
+Use GitHub and GitHub Actions for version control and CI/CD automation.
 
+---
+
+## 🛠 Features
+- **Lag Values**: Previous day's closing prices (e.g., lag-1, lag-2)
+- **Moving Averages**: 5-day and 20-day moving averages
+- **RSI**: Relative Strength Index for momentum analysis
+- **Bollinger Bands**: Volatility indicators
+
+---
+
+## 📌 Project Scope
+- **Data Source**:  
+  - Historical stock data collected using `yfinance` (Yahoo Finance).
+  - Open, high, low, close prices, and volume data.
+- **Limitations**:
+  - Does not consider news or external factors.
+  - Focused on a limited set of stocks.
+  - Predictions are for short-term only.
+- **Constraints**:
+  - Models limited to Linear Regression, Random Forest, and Logistic Regression.
+  - Only public APIs used.
+
+---
+
+## 🧩 High-Level Methodology
+1. **Data Collection**: Using `yfinance` API.
+2. **Data Cleaning**: Handling missing values, removing duplicates.
+3. **Exploratory Data Analysis (EDA)**:  
+   Visualize trends with plots, moving averages, and heatmaps.
+4. **Feature Engineering**:  
+   Create lag values, moving averages, RSI, Bollinger Bands.
+5. **Model Building**:  
+   - **Regression Models**: Linear Regression, Random Forest
+   - **Classification Model**: Logistic Regression
+6. **Model Evaluation**:
+   - Regression: MAE (Mean Absolute Error)
+   - Classification: Accuracy, Precision, Recall, F1-Score
+7. **Deployment**:  
+   An interactive **Streamlit** web app where users can input stock tickers and get predictions.
+
+---
+
+## ⚙️ Tools and Technologies
+- **Programming Language**: Python
+- **Notebook/IDE**:
+  - Jupyter Notebook
+  - Visual Studio Code (VS Code)
+  - Axel DICE
+  - Google Colab (for training models)
+- **Libraries**:
+  - `pandas`, `numpy` (Data processing)
+  - `matplotlib`, `seaborn`, `plotly` (Visualization)
+  - `scikit-learn` (Machine Learning)
+- **Deployment**:
+  - Streamlit (Web App)
+  - GitHub (Version Control)
+  - GitHub Actions (CI/CD Automation)
+
+---
+
+## 🚀 How to Run the Project
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/Vignesh-72/Stock-Price-Prediction-Model.git
+   cd Stock-Price-Prediction-Model
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Run the Streamlit App**
+   ```bash
+   streamlit run app.py
+   ```
+
+4. **Usage**
+   - Enter the stock ticker symbol (e.g., `AAPL`, `GOOGL`) in the Streamlit dashboard.
+   - View predictions for price direction and next day's closing price.
+
+---
+
+## 📄 License
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## 🙌 Acknowledgements
+- [Yahoo Finance](https://finance.yahoo.com/) for stock data.
+- [Streamlit](https://streamlit.io/) for the dashboard framework.
+- [Scikit-learn](https://scikit-learn.org/) for machine learning models.
