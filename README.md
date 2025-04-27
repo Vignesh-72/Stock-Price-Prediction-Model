@@ -1,6 +1,6 @@
 # Stock-Price-Prediction-Model
 
-![Stock Prediction Visualization](https://img.shields.io/badge/Python-3.8%2B-blue) ![License](https://img.shields.io/badge/License-MIT-green) ![Framework](https://img.shields.io/badge/Framework-Streamlit-red)
+![Stock Prediction Visualization](https://img.shields.io/badge/Python-3.8%2B-blue) ![Framework](https://img.shields.io/badge/Framework-Streamlit-red)
 
 A machine learning application that predicts next-day stock prices and movement direction using technical indicators.
 
