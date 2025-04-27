@@ -1,6 +1,6 @@
-from data_fetcher import fetch_stock_data
-from feature_engineer import add_technical_features
-from model_predictor import StockPredictor
+from .data_fetcher import fetch_stock_data
+from .feature_engineer import add_technical_features
+from .model_predictor import StockPredictor
 import pandas as pd
 
 def analyze_stock(ticker: str) -> dict:
