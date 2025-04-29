@@ -104,3 +104,4 @@ Use GitHub and GitHub Actions for version control and CI/CD automation.
    - Enter the stock ticker symbol (e.g., `AAPL`, `GOOGL`) in the Streamlit dashboard.
    - View predictions for price direction and next day's closing price.
 
+---
