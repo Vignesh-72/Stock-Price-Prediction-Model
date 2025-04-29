@@ -104,9 +104,3 @@ Use GitHub and GitHub Actions for version control and CI/CD automation.
    - Enter the stock ticker symbol (e.g., `AAPL`, `GOOGL`) in the Streamlit dashboard.
    - View predictions for price direction and next day's closing price.
 
----
-
-## 🙌 Acknowledgements
-- [Yahoo Finance](https://finance.yahoo.com/) for stock data.
-- [Streamlit](https://streamlit.io/) for the dashboard framework.
-- [Scikit-learn](https://scikit-learn.org/) for machine learning models.
