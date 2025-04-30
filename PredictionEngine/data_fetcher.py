@@ -1,3 +1,6 @@
+import appdirs as ad
+ad.user_cache_dir = lambda *args: "/tmp"  # Fix for Streamlit Cloud
+
 import yfinance as yf
 import pandas as pd
 import time
