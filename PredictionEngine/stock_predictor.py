@@ -29,9 +29,17 @@ def analyze_stock(ticker: str) -> dict:
         'ticker': ticker,
         'historical_data': processed_data,
         'prediction': predictor.predict(latest_features),
-        'evaluation': predictor.evaluate(X_test, y_test_reg, y_test_clf),
+        'evaluation': {
+            **predictor.evaluate(X_test, y_test_reg, y_test_clf),
+            'regression': {
+                'actual': y_test_reg.values,
+                'predicted': predictor.reg_model.predict(X_test)
+            }
+        },
         'dates': {
             'train_dates': X_train.index,
             'test_dates': X_test.index
-        }
+        },
+        'y_test_reg': y_test_reg,
+        'reg_preds ': predictor.reg_model.predict(X_test)
     }
