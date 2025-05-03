@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 
 def render_stock_visualizations(results):
-    """Render stock prediction visualizations with focus on accuracy and predictions"""
+    """Render stock prediction visualizations with focus on trading decisions"""
     try:
         # Validate input structure
         required_keys = ['ticker', 'historical_data', 'prediction', 'evaluation', 'dates']
@@ -31,7 +31,7 @@ def render_stock_visualizations(results):
         }
 
         # 1. Prediction Summary Cards
-        st.subheader("Prediction Summary")
+        st.subheader("Trading Recommendation")
         cols = st.columns(3)
         with cols[0]:
             st.metric("Last Close Price", f"${pred.get('last_close', 'N/A'):.2f}")
@@ -42,11 +42,56 @@ def render_stock_visualizations(results):
                      f"{price_diff:.2f} ({price_diff/pred.get('last_close', 1)*100:.2f}%)")
         with cols[2]:
             direction = pred.get('direction', 'UNKNOWN')
-            color = "green" if direction == "UP" else "red"
-            st.metric("Predicted Direction", direction, delta_color="off")
+            rec = "BUY" if direction == "UP" else "SELL"
+            color = color_scheme['up'] if direction == "UP" else color_scheme['down']
+            st.metric("Recommendation", rec, delta_color="off")
+        # 2. Actual vs Predicted Comparison
+        st.subheader("Model Performance: Actual vs Predicted")
+        try:
+            if isinstance(eval_data['regression']['actual'], np.ndarray):
+                eval_data['regression']['actual'] = pd.Series(
+                    eval_data['regression']['actual'],
+                    index=pd.to_datetime(dates['test_dates'])
+                )
 
-        # 2. Volatility & Price Change Trend
-        # 2. Volatility & Price Change Trend
+            if isinstance(eval_data['regression']['predicted'], np.ndarray):
+                eval_data['regression']['predicted'] = pd.Series(
+                    eval_data['regression']['predicted'],
+                    index=pd.to_datetime(dates['test_dates'])
+                )
+
+            fig2 = go.Figure()
+
+            fig2.add_trace(go.Scatter(
+                x=eval_data['regression']['actual'].index,
+                y=eval_data['regression']['actual'],
+                name='Actual Price',
+                line=dict(color=color_scheme['actual'], width=2),
+                mode='lines+markers'
+            ))
+
+            fig2.add_trace(go.Scatter(
+                x=eval_data['regression']['predicted'].index,
+                y=eval_data['regression']['predicted'],
+                name='Predicted Price',
+                line=dict(color=color_scheme['predicted'], width=2, dash='dash'),
+                mode='lines+markers'
+            ))
+
+            fig2.update_layout(
+                height=500,
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                font=dict(color='white'),
+                xaxis_title='Date',
+                yaxis_title='Price ($)',
+                hovermode='x unified'
+            )
+            st.plotly_chart(fig2, use_container_width=True)
+        except Exception as e:
+            st.error(f"Error in Actual vs Predicted: {str(e)}")
+
+        # 3. Volatility & Price Change Trend
         st.subheader("Volatility & Price Change Trend")
         try:
             # Convert numpy array to pandas Series if needed
@@ -99,54 +144,141 @@ def render_stock_visualizations(results):
         except Exception as e:
             st.error(f"Error in Volatility Plot: {str(e)}")
 
-        # 3. Actual vs Predicted Comparison
-        st.subheader("Model Performance: Actual vs Predicted")
+        # 4. Moving Average Crossover
+        st.subheader("Moving Average Crossover")
         try:
-            if isinstance(eval_data['regression']['actual'], np.ndarray):
-                eval_data['regression']['actual'] = pd.Series(
-                    eval_data['regression']['actual'],
-                    index=pd.to_datetime(dates['test_dates'])
-                )
-
-            if isinstance(eval_data['regression']['predicted'], np.ndarray):
-                eval_data['regression']['predicted'] = pd.Series(
-                    eval_data['regression']['predicted'],
-                    index=pd.to_datetime(dates['test_dates'])
-                )
-
-            fig2 = go.Figure()
-
-            fig2.add_trace(go.Scatter(
-                x=eval_data['regression']['actual'].index,
-                y=eval_data['regression']['actual'],
-                name='Actual Price',
-                line=dict(color=color_scheme['actual'], width=2),
-                mode='lines+markers'
-            ))
-
-            fig2.add_trace(go.Scatter(
-                x=eval_data['regression']['predicted'].index,
-                y=eval_data['regression']['predicted'],
-                name='Predicted Price',
-                line=dict(color=color_scheme['predicted'], width=2, dash='dash'),
-                mode='lines+markers'
-            ))
-
-            fig2.update_layout(
-                height=500,
-                plot_bgcolor='rgba(0,0,0,0)',
-                paper_bgcolor='rgba(0,0,0,0)',
-                font=dict(color='white'),
-                xaxis_title='Date',
-                yaxis_title='Price ($)',
-                hovermode='x unified'
-            )
-            st.plotly_chart(fig2, use_container_width=True)
+            if isinstance(hist_data, pd.DataFrame):
+                if ('MA_5', '') in hist_data.columns and ('MA_20', '') in hist_data.columns:
+                    ma_short = hist_data[('MA_5', '')]
+                    ma_long = hist_data[('MA_20', '')]
+                    prices = hist_data[('Close', 'GOOGL')] if ('Close', 'GOOGL') in hist_data.columns else hist_data.iloc[:, 0]
+                    
+                    fig_ma = go.Figure()
+                    
+                    # Price line
+                    fig_ma.add_trace(go.Scatter(
+                        x=prices.index,
+                        y=prices,
+                        name='Price',
+                        line=dict(color='#1f77b4', width=1),
+                        mode='lines'
+                    ))
+                    
+                    # Short MA
+                    fig_ma.add_trace(go.Scatter(
+                        x=ma_short.index,
+                        y=ma_short,
+                        name='5-Day MA',
+                        line=dict(color=color_scheme['up'], width=2),
+                        mode='lines'
+                    ))
+                    
+                    # Long MA
+                    fig_ma.add_trace(go.Scatter(
+                        x=ma_long.index,
+                        y=ma_long,
+                        name='20-Day MA',
+                        line=dict(color=color_scheme['down'], width=2),
+                        mode='lines'
+                    ))
+                    
+                    # Highlight crossover points
+                    crossover_up = (ma_short > ma_long) & (ma_short.shift(1) <= ma_long.shift(1))
+                    crossover_down = (ma_short < ma_long) & (ma_short.shift(1) >= ma_long.shift(1))
+                    
+                    fig_ma.add_trace(go.Scatter(
+                        x=prices.index[crossover_up],
+                        y=prices[crossover_up],
+                        name='Buy Signal',
+                        mode='markers',
+                        marker=dict(
+                            color=color_scheme['up'],
+                            size=10,
+                            symbol='triangle-up')
+                    ))
+                    
+                    fig_ma.add_trace(go.Scatter(
+                        x=prices.index[crossover_down],
+                        y=prices[crossover_down],
+                        name='Sell Signal',
+                        mode='markers',
+                        marker=dict(
+                            color=color_scheme['down'],
+                            size=10,
+                            symbol='triangle-down')
+                    ))
+                    
+                    fig_ma.update_layout(
+                        height=500,
+                        plot_bgcolor='rgba(0,0,0,0)',
+                        paper_bgcolor='rgba(0,0,0,0)',
+                        font=dict(color='white'),
+                        xaxis_title='Date',
+                        yaxis_title='Price ($)',
+                        hovermode='x unified'
+                    )
+                    st.plotly_chart(fig_ma, use_container_width=True)
+                    
         except Exception as e:
-            st.error(f"Error in Actual vs Predicted: {str(e)}")
-        # Add this after your existing visualizations (before the Model Performance Metrics section)
-    
-        # 4. Accuracy Percentage Plot
+            st.error(f"Error in Moving Average Plot: {str(e)}")
+
+        # 5. RSI Indicator with Overbought/Oversold Levels
+        st.subheader("RSI Indicator")
+        try:
+            if isinstance(hist_data, pd.DataFrame) and ('RSI', '') in hist_data.columns:
+                rsi = hist_data[('RSI', '')]
+                
+                fig_rsi = go.Figure()
+                
+                # RSI line
+                fig_rsi.add_trace(go.Scatter(
+                    x=rsi.index,
+                    y=rsi,
+                    name='RSI',
+                    line=dict(color='#FFA500', width=2),
+                    mode='lines'
+                ))
+                
+                # Overbought level
+                fig_rsi.add_hline(y=70, line_dash="dash", 
+                                line_color=color_scheme['down'],
+                                annotation_text="Overbought",
+                                annotation_position="top right")
+                
+                # Oversold level
+                fig_rsi.add_hline(y=30, line_dash="dash",
+                                line_color=color_scheme['up'],
+                                annotation_text="Oversold", 
+                                annotation_position="bottom right")
+                
+                # Current RSI marker
+                last_rsi = rsi.iloc[-1]
+                fig_rsi.add_trace(go.Scatter(
+                    x=[rsi.index[-1]],
+                    y=[last_rsi],
+                    name='Current',
+                    mode='markers',
+                    marker=dict(
+                        color='yellow',
+                        size=10,
+                        line=dict(width=1, color='black')
+                )))
+                
+                fig_rsi.update_layout(
+                    height=400,
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    font=dict(color='white'),
+                    xaxis_title='Date',
+                    yaxis_title='RSI',
+                    yaxis_range=[0, 100],
+                    hovermode='x unified'
+                )
+                st.plotly_chart(fig_rsi, use_container_width=True)
+                
+        except Exception as e:
+            st.error(f"Error in RSI Plot: {str(e)}")
+
         st.subheader("Prediction Accuracy (%)")
         try:
             actual = eval_data['regression']['actual']
