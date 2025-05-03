@@ -21,8 +21,8 @@ def render_stock_visualizations(results):
 
         # Color scheme
         color_scheme = {
-            'actual': '#00FF00',  # Green
-            'predicted': '#FF0000',  # Red
+            'actual': '#00FF00',
+            'predicted': '#FF0000',
             'up': '#00FF00',
             'down': '#FF0000',
             'accuracy_high': '#00FF00',
@@ -45,60 +45,69 @@ def render_stock_visualizations(results):
             color = "green" if direction == "UP" else "red"
             st.metric("Predicted Direction", direction, delta_color="off")
 
-        # 2. Recent Price History with Prediction
-        st.subheader("Recent Price Trend with Prediction")
+        # 2. Volatility & Price Change Trend
+        # 2. Volatility & Price Change Trend
+        st.subheader("Volatility & Price Change Trend")
         try:
-            # Get last 10 days of data
-            recent_data = hist_data.iloc[-10:]
-            
-            fig1 = go.Figure()
-            
-            # Historical prices
-            fig1.add_trace(go.Scatter(
-                x=recent_data.index,
-                y=recent_data['Close'],
-                name='Historical Price',
-                line=dict(color='#1f77b4', width=3),
-                mode='lines+markers'
+            # Convert numpy array to pandas Series if needed
+            if isinstance(eval_data['regression']['actual'], np.ndarray):
+                actual_prices = pd.Series(
+                    eval_data['regression']['actual'],
+                    index=pd.to_datetime(dates['test_dates'])
+                )
+            else:
+                actual_prices = eval_data['regression']['actual']
+
+            # Now calculate returns and volatility
+            returns = actual_prices.pct_change().dropna() * 100
+            volatility = returns.rolling(window=5).std()
+
+            fig_vol = go.Figure()
+
+            fig_vol.add_trace(go.Scatter(
+                x=returns.index,
+                y=returns,
+                name='Daily Return (%)',
+                line=dict(color='orange', width=2),
+                mode='lines+markers',
+                yaxis='y1'
             ))
-            
-            # Tomorrow's prediction
-            if 'price' in pred and isinstance(hist_data.index, pd.DatetimeIndex):
-                future_date = hist_data.index[-1] + pd.Timedelta(days=1)
-                fig1.add_trace(go.Scatter(
-                    x=[future_date],
-                    y=[pred['price']],
-                    name='Tomorrow Prediction',
-                    mode='markers',
-                    marker=dict(
-                        color='gold',
-                        size=15,
-                        line=dict(width=1, color='black')
-                )))
-            
-            fig1.update_layout(
+
+            fig_vol.add_trace(go.Scatter(
+                x=volatility.index,
+                y=volatility,
+                name='Rolling Volatility (5D)',
+                line=dict(color='purple', width=2, dash='dot'),
+                mode='lines',
+                yaxis='y2'
+            ))
+
+            fig_vol.update_layout(
                 height=500,
                 plot_bgcolor='rgba(0,0,0,0)',
                 paper_bgcolor='rgba(0,0,0,0)',
                 font=dict(color='white'),
                 xaxis_title='Date',
-                yaxis_title='Price ($)',
-                hovermode='x unified'
+                yaxis=dict(title='Daily Return (%)', side='left', showgrid=False),
+                yaxis2=dict(title='Volatility', overlaying='y', side='right', showgrid=False),
+                hovermode='x unified',
+                legend=dict(x=0, y=1.15, orientation='h')
             )
-            st.plotly_chart(fig1, use_container_width=True)
+
+            st.plotly_chart(fig_vol, use_container_width=True)
+
         except Exception as e:
-            st.error(f"Error in Recent Price Trend: {str(e)}")
+            st.error(f"Error in Volatility Plot: {str(e)}")
 
         # 3. Actual vs Predicted Comparison
         st.subheader("Model Performance: Actual vs Predicted")
         try:
-            # Convert evaluation data if needed
             if isinstance(eval_data['regression']['actual'], np.ndarray):
                 eval_data['regression']['actual'] = pd.Series(
                     eval_data['regression']['actual'],
                     index=pd.to_datetime(dates['test_dates'])
                 )
-            
+
             if isinstance(eval_data['regression']['predicted'], np.ndarray):
                 eval_data['regression']['predicted'] = pd.Series(
                     eval_data['regression']['predicted'],
@@ -106,8 +115,7 @@ def render_stock_visualizations(results):
                 )
 
             fig2 = go.Figure()
-            
-            # Actual prices
+
             fig2.add_trace(go.Scatter(
                 x=eval_data['regression']['actual'].index,
                 y=eval_data['regression']['actual'],
@@ -115,8 +123,7 @@ def render_stock_visualizations(results):
                 line=dict(color=color_scheme['actual'], width=2),
                 mode='lines+markers'
             ))
-            
-            # Predicted prices
+
             fig2.add_trace(go.Scatter(
                 x=eval_data['regression']['predicted'].index,
                 y=eval_data['regression']['predicted'],
@@ -137,18 +144,18 @@ def render_stock_visualizations(results):
             st.plotly_chart(fig2, use_container_width=True)
         except Exception as e:
             st.error(f"Error in Actual vs Predicted: {str(e)}")
-
+        # Add this after your existing visualizations (before the Model Performance Metrics section)
+    
         # 4. Accuracy Percentage Plot
         st.subheader("Prediction Accuracy (%)")
         try:
-            # Calculate accuracy
             actual = eval_data['regression']['actual']
             predicted = eval_data['regression']['predicted']
             error = actual - predicted
             accuracy = 100 - (abs(error) / actual * 100)
-            
+
             fig3 = go.Figure()
-            
+
             fig3.add_trace(go.Bar(
                 x=actual.index,
                 y=accuracy,
@@ -157,11 +164,10 @@ def render_stock_visualizations(results):
                                           color_scheme['accuracy_low'])),
                 name='Accuracy'
             ))
-            
-            # Add reference lines
+
             fig3.add_hline(y=95, line_dash="dash", line_color=color_scheme['accuracy_high'])
             fig3.add_hline(y=90, line_dash="dash", line_color=color_scheme['accuracy_med'])
-            
+
             fig3.update_layout(
                 height=400,
                 plot_bgcolor='rgba(0,0,0,0)',
@@ -176,23 +182,20 @@ def render_stock_visualizations(results):
         except Exception as e:
             st.error(f"Error in Accuracy Plot: {str(e)}")
 
-        # 5. Model Performance Metrics - IMPROVED VERSION
+        # 5. Model Performance Metrics
         st.subheader("Model Performance Metrics")
         try:
-            # Calculate all metrics first
             mae = eval_data['regression'].get('mae', np.nan)
             y_true = eval_data['classification']['actual']
             y_pred = eval_data['classification']['predicted']
-            
-            # Calculate all classification metrics
+
             cls_metrics = {
                 'Accuracy': accuracy_score(y_true, y_pred),
                 'Precision': precision_score(y_true, y_pred),
                 'Recall': recall_score(y_true, y_pred),
                 'F1 Score': f1_score(y_true, y_pred)
             }
-            
-            # Create a more professional metrics display
+
             st.markdown("""
             <style>
             .metric-card {
@@ -219,14 +222,11 @@ def render_stock_visualizations(results):
             }
             </style>
             """, unsafe_allow_html=True)
-            
-            # Create two columns
+
             col1, col2 = st.columns(2)
-            
+
             with col1:
                 st.markdown("### Regression Metrics")
-                
-                # MAE card
                 st.markdown(f"""
                 <div class="metric-card">
                     <div class="metric-title">Mean Absolute Error (MAE)</div>
@@ -234,8 +234,7 @@ def render_stock_visualizations(results):
                     <div class="metric-help">Average absolute difference between actual and predicted prices</div>
                 </div>
                 """, unsafe_allow_html=True)
-                
-                # Calculate and show MAPE
+
                 actual_prices = eval_data['regression']['actual']
                 predicted_prices = eval_data['regression']['predicted']
                 mape = np.mean(np.abs((actual_prices - predicted_prices) / actual_prices)) * 100
@@ -246,13 +245,12 @@ def render_stock_visualizations(results):
                     <div class="metric-help">Average percentage difference between actual and predicted</div>
                 </div>
                 """, unsafe_allow_html=True)
-            
+
             with col2:
                 st.markdown("### Classification Metrics")
-                
-                # Create a grid for classification metrics
+
                 grid_col1, grid_col2 = st.columns(2)
-                
+
                 with grid_col1:
                     st.markdown(f"""
                     <div class="metric-card">
@@ -261,7 +259,7 @@ def render_stock_visualizations(results):
                         <div class="metric-help">Overall prediction correctness</div>
                     </div>
                     """, unsafe_allow_html=True)
-                    
+
                     st.markdown(f"""
                     <div class="metric-card">
                         <div class="metric-title">Precision</div>
@@ -269,7 +267,7 @@ def render_stock_visualizations(results):
                         <div class="metric-help">Correct UP predictions</div>
                     </div>
                     """, unsafe_allow_html=True)
-                
+
                 with grid_col2:
                     st.markdown(f"""
                     <div class="metric-card">
@@ -278,7 +276,7 @@ def render_stock_visualizations(results):
                         <div class="metric-help">Actual UP movements captured</div>
                     </div>
                     """, unsafe_allow_html=True)
-                    
+
                     st.markdown(f"""
                     <div class="metric-card">
                         <div class="metric-title">F1 Score</div>
@@ -286,7 +284,7 @@ def render_stock_visualizations(results):
                         <div class="metric-help">Balance of precision and recall</div>
                     </div>
                     """, unsafe_allow_html=True)
-                
+
         except Exception as e:
             st.error(f"Error calculating metrics: {str(e)}")
 
