@@ -359,13 +359,6 @@ def render_stock_visualizations(results):
 
             with col1:
                 st.markdown("### Regression Metrics")
-                st.markdown(f"""
-                <div class="metric-card">
-                    <div class="metric-title">Mean Absolute Error (MAE)</div>
-                    <div class="metric-value">{f"${mae:.2f}" if isinstance(mae, (int, float)) else mae}</div>
-                    <div class="metric-help">Average absolute difference between actual and predicted prices</div>
-                </div>
-                """, unsafe_allow_html=True)
 
                 actual_prices = eval_data['regression']['actual']
                 predicted_prices = eval_data['regression']['predicted']
