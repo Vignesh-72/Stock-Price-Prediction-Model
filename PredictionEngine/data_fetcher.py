@@ -1,4 +1,47 @@
-from pathlib import Path
+from alpha_vantage.timeseries import TimeSeries
+import pandas as pd
+import time
+
+# ✅ Set your Alpha Vantage API key
+ALPHA_VANTAGE_API_KEY = "your_api_key_here"
+
+# ✅ Create global client once
+ts = TimeSeries(key=ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date')
+
+def fetch_stock_data(ticker: str) -> pd.DataFrame:
+    """
+    Fetches 1 year of historical daily stock data using Alpha Vantage.
+    Falls back with retry logic.
+    """
+    max_retries = 3
+    for attempt in range(1, max_retries + 1):
+        try:
+            print(f"📈 Fetching data for {ticker}, attempt {attempt}")
+            data, meta = ts.get_daily_adjusted(symbol=ticker, outputsize='full')
+            if data is not None and not data.empty:
+                # Filter last 1 year
+                data = data.sort_index()
+                data.index = pd.to_datetime(data.index)
+                one_year_ago = pd.Timestamp.today() - pd.Timedelta(days=365)
+                df = data[data.index >= one_year_ago]
+                df = df.rename(columns={
+                    '1. open': 'Open',
+                    '2. high': 'High',
+                    '3. low': 'Low',
+                    '4. close': 'Close',
+                    '5. adjusted close': 'Adj Close',
+                    '6. volume': 'Volume'
+                })
+                return df
+            else:
+                print(f"⚠️ Empty data received for {ticker}, retrying...")
+        except Exception as e:
+            print(f"❌ Error fetching data for {ticker}: {e}")
+        time.sleep(2)
+    raise ValueError(f"❌ No data returned for ticker '{ticker}' after {max_retries} attempts.")
+
+
+'''from pathlib import Path
 from datetime import datetime, timedelta
 import time
 import pandas as pd
@@ -54,7 +97,7 @@ def fetch_stock_data(ticker: str) -> pd.DataFrame:
         time.sleep(2)
 
     raise ValueError(f"❌ No data returned for ticker '{ticker}' after {max_retries} attempts.")
-
+'''
 '''
 from pathlib import Path
 from datetime import datetime, timedelta
