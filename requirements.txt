@@ -9,3 +9,4 @@ numpy==1.26.4
 requests-cache
 requests-ratelimiter
 pyrate-limiter
+alpha_vantage==2.3.1
