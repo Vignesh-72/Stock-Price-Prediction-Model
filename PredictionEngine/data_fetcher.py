@@ -3,7 +3,7 @@ import pandas as pd
 import time
 
 # ✅ Set your Alpha Vantage API key
-ALPHA_VANTAGE_API_KEY = "your_api_key_here"
+ALPHA_VANTAGE_API_KEY = "VUC3GAVG5YETDLJC"
 
 # ✅ Create global client once
 ts = TimeSeries(key=ALPHA_VANTAGE_API_KEY, output_format='pandas', indexing_type='date')
