@@ -6,6 +6,51 @@ import yfinance as yf
 import appdirs as ad
 import os
 
+# Smart request handling
+import requests_cache
+from requests_ratelimiter import LimiterSession
+from pyrate_limiter import Duration, RequestRate, Limiter
+
+# Set Streamlit-safe cache dir
+CACHE_DIR = "/tmp/yf-cache"
+ad.user_cache_dir = lambda *args: CACHE_DIR
+Path(CACHE_DIR).mkdir(parents=True, exist_ok=True)
+
+# Set up caching and rate limiting
+cached_session = requests_cache.CachedSession(
+    cache_name=os.path.join(CACHE_DIR, "yfinance.cache"),
+    backend="sqlite",
+    expire_after=300  # 5 minutes
+)
+cached_session.headers["User-agent"] = "Mozilla/5.0 (stock-app)"
+
+limiter = Limiter(RequestRate(2, Duration.SECOND * 5))
+session = LimiterSession(limiter=limiter)
+session._session = cached_session
+
+# ✅ More reliable method using Ticker().history()
+def fetch_stock_data(ticker: str) -> pd.DataFrame:
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            stock = yf.Ticker(ticker, session=session)
+            df = stock.history(period="1y", auto_adjust=True)
+            if not df.empty:
+                return df
+        except Exception as e:
+            print(f"Attempt {attempt + 1} failed: {e}")
+        time.sleep(2)
+    raise ValueError(f"No data returned for ticker '{ticker}' after {max_retries} attempts.")
+
+'''
+from pathlib import Path
+from datetime import datetime, timedelta
+import time
+import pandas as pd
+import yfinance as yf
+import appdirs as ad
+import os
+
 #External dependencies for smarter requests
 import requests_cache
 from requests_ratelimiter import LimiterSession
@@ -58,7 +103,7 @@ def fetch_stock_data(ticker: str) -> pd.DataFrame:
 
     raise ValueError(f"No data returned for ticker '{ticker}' after {max_retries} attempts.")
 
-
+'''
 '''
 from pathlib import Path
 from datetime import datetime, timedelta
