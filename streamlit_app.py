@@ -12,7 +12,7 @@ def main():
         try:
             results = analyze_stock(ticker)
             # Debug: Print the results structure
-            st.write("Raw results data:", results)
+            # st.write("Raw results data:", results)
             
             # Ensure required keys exist
             required_keys = ['historical_data', 'prediction', 'evaluation']
