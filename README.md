@@ -1,5 +1,3 @@
-![workflow](https://github.com/user-attachments/assets/aa50a3d1-3fe6-4d5e-ab44-c92b8c35e529)# Stock Price Prediction Model
-
 ## 📈 Project Overview
 Due to rapid and unpredictable price changes, stock market prediction is a complex task.  
 This project uses machine learning models to predict:
@@ -47,6 +45,8 @@ Use GitHub and GitHub Actions for version control and CI/CD automation.
 ---
 
 ## 🧩 High-Level Methodology
+
+![workflow](https://github.com/user-attachments/assets/302a0eac-bef0-48ce-9aa7-e298c797c52a)
 
 1. **Data Collection**: Using `yfinance` API.
 2. **Data Cleaning**: Handling missing values, removing duplicates.
