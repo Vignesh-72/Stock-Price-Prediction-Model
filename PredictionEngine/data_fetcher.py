@@ -1,30 +1,13 @@
-from pathlib import Path
 from datetime import datetime, timedelta
 import time
 import pandas as pd
-import appdirs as ad
 import os
-
-import appdirs as ad
-ad.user_cache_dir = lambda *args: "/tmp"
-
-
 import yfinance as yf
 
-'''
-# Use Streamlit-compatible cache directory
-CACHE_DIR = "/tmp/yf-cache"
-ad.user_cache_dir = lambda *args: CACHE_DIR
-Path(CACHE_DIR).mkdir(parents=True, exist_ok=True)
+import appdirs
+appdirs.user_cache_dir = lambda *args: "/tmp"
 
-#  Optional: disable yfinance caching (uncomment if you want to force fresh fetches)
-# os.environ["YFINANCE_NO_CACHE"] = "1"
-'''
 def fetch_stock_data(ticker: str) -> pd.DataFrame:
-    """
-    Fetches 1 year of historical stock data for the given ticker using yfinance.
-    Implements retries and uses explicit start/end dates to avoid yfinance issues.
-    """
     end_date = datetime.today()
     start_date = end_date - timedelta(days=365)
     max_retries = 3
@@ -39,6 +22,6 @@ def fetch_stock_data(ticker: str) -> pd.DataFrame:
         )
         if not df.empty:
             return df
-        time.sleep(2)  # Wait before retrying
+        time.sleep(2)
 
     raise ValueError(f"No data returned for ticker '{ticker}' after {max_retries} attempts.")
