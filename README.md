@@ -1,7 +1,7 @@
 ![workflow](https://github.com/user-attachments/assets/aa50a3d1-3fe6-4d5e-ab44-c92b8c35e529)# Stock Price Prediction Model
 
 ## 📈 Project Overview
-Stock market prediction is a complex task due to rapid and unpredictable price changes.  
+Due to rapid and unpredictable price changes, stock market prediction is a complex task.  
 This project uses machine learning models to predict:
 - **The next day's closing stock price** (Regression)
 - **The direction of price movement (Up/Down)** (Classification)  
@@ -39,7 +39,7 @@ Use GitHub and GitHub Actions for version control and CI/CD automation.
 - **Limitations**:
   - Does not consider news or external factors.
   - Focused on a limited set of stocks.
-  - Predictions are for short-term only.
+  - Predictions are for short term only.
 - **Constraints**:
   - Models limited to Linear Regression, Random Forest, and Logistic Regression.
   - Only public APIs used.
@@ -48,14 +48,12 @@ Use GitHub and GitHub Actions for version control and CI/CD automation.
 
 ## 🧩 High-Level Methodology
 
-![workflow](https://github.com/user-attachments/assets/6fe79d49-3618-4739-ae13-670299685d6f)
-
 1. **Data Collection**: Using `yfinance` API.
 2. **Data Cleaning**: Handling missing values, removing duplicates.
 3. **Exploratory Data Analysis (EDA)**:  
    Visualize trends with plots, moving averages, and heatmaps.
 4. **Feature Engineering**:  
-   Create lag values, moving averages, RSI, Bollinger Bands.
+   Create lag values, moving averages, RSI, and Bollinger Bands.
 5. **Model Building**:  
    - **Regression Models**: Linear Regression, Random Forest
    - **Classification Model**: Logistic Regression
