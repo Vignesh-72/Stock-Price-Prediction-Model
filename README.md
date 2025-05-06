@@ -47,7 +47,9 @@ Use GitHub and GitHub Actions for version control and CI/CD automation.
 ---
 
 ## 🧩 High-Level Methodology
+
 ![workflow](https://github.com/user-attachments/assets/6fe79d49-3618-4739-ae13-670299685d6f)
+
 1. **Data Collection**: Using `yfinance` API.
 2. **Data Cleaning**: Handling missing values, removing duplicates.
 3. **Exploratory Data Analysis (EDA)**:  
