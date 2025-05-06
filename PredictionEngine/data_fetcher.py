@@ -2,10 +2,16 @@ from pathlib import Path
 from datetime import datetime, timedelta
 import time
 import pandas as pd
-import yfinance as yf
 import appdirs as ad
 import os
 
+import appdirs as ad
+ad.user_cache_dir = lambda *args: "/tmp"
+
+
+import yfinance as yf
+
+'''
 # Use Streamlit-compatible cache directory
 CACHE_DIR = "/tmp/yf-cache"
 ad.user_cache_dir = lambda *args: CACHE_DIR
@@ -13,7 +19,7 @@ Path(CACHE_DIR).mkdir(parents=True, exist_ok=True)
 
 #  Optional: disable yfinance caching (uncomment if you want to force fresh fetches)
 # os.environ["YFINANCE_NO_CACHE"] = "1"
-
+'''
 def fetch_stock_data(ticker: str) -> pd.DataFrame:
     """
     Fetches 1 year of historical stock data for the given ticker using yfinance.
