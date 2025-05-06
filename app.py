@@ -2,10 +2,6 @@
 import streamlit as st
 from PredictionEngine import analyze_stock
 from frontend.visualization import render_stock_visualizations
-import yfinance as yf
-
-import appdirs
-appdirs.user_cache_dir = lambda *args: "/tmp"
 
 def main():
     st.title("Stock Prediction Dashboard")
