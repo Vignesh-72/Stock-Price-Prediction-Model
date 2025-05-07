@@ -99,7 +99,6 @@ This tool serves as a decision support system for analysts and traders, using hi
 
 - **Deployment & Collaboration:**  
   - Streamlit (Web app hosting)  
-  - GitHub & GitHub Actions (CI/CD pipeline)
 
 ---
 
