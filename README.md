@@ -1,108 +1,147 @@
-## 📈 Project Overview
-Due to rapid and unpredictable price changes, stock market prediction is a complex task.  
-This project uses machine learning models to predict:
-- **The next day's closing stock price** (Regression)
-- **The direction of price movement (Up/Down)** (Classification)  
 
-It aims to assist financial analysts and investors by uncovering hidden patterns using historical data and technical indicators.
+# 📊 Stock Price Prediction Web App
+
+[![Live App](https://img.shields.io/badge/🚀%20Launch%20App-Streamlit-green?style=for-the-badge)](https://stock-price-prediction-hybridmodel.streamlit.app/)
+[![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff)](#)
+
+## 📈 Project Overview
+
+**Project Title:** Cracking the Market Code with AI-Driven Stock Price Prediction using Time Series Analysis
+
+Stock market forecasting is a complex challenge due to its inherent volatility and unpredictability. Traditional statistical models often fail to capture hidden patterns in stock price movements. This project addresses the issue by leveraging machine learning models to:
+
+- Predict the **next day's closing price** (Regression)
+- Predict the **direction of the stock price movement (Up/Down)** (Classification)
+
+This tool serves as a decision support system for analysts and traders, using historical and technical indicators to generate informed predictions.
 
 ---
 
 ## 🎯 Objectives
-- **Simplify Stock Movement Predictions**  
-Predict stock price trends using past data and technical indicators.
-- **Predict Future Prices**  
-Build a regression model to forecast the next day’s closing price.
-- **Classification Model**  
-Predict if the stock price will move up or down.
-- **Interactive Frontend Dashboard**  
-Allow users to input stock tickers and view real-time predictions.
-- **Collaborative Development**  
-Use GitHub and GitHub Actions for version control and CI/CD automation.
+
+- **Predict Future Prices:** Develop regression models (Random Forest, Linear Regression) to forecast next-day closing prices.
+- **Predict Price Direction:** Build a classification model (Logistic Regression) to determine price movement direction.
+- **Feature Engineering:** Incorporate technical indicators like Lag values, MA_5, MA_20, and RSI.
+- **EDA & Visualization:** Analyze trends and patterns using interactive visualizations.
+- **Interactive Dashboard:** Enable real-time user input and stock visualization through a Streamlit-based interface.
+- **Version Control & CI/CD:** Use GitHub and GitHub Actions for collaborative development and deployment automation.
 
 ---
 
-## 🛠 Features
-- **Lag Values**: Previous day's closing prices (e.g., lag-1, lag-2)
-- **Moving Averages**: 5-day and 20-day moving averages
-- **RSI**: Relative Strength Index for momentum analysis
-- **Bollinger Bands**: Volatility indicators
+## 🧠 Methodology
+1. **Data Collection:**  
+   - Historical stock data fetched using `yfinance` API.
+
+2. **Data Preprocessing:**  
+   - Handle missing values (dropna) from rolling calculations.
+   - Outliers retained to preserve real market scenarios.
+
+3. **Feature Engineering:**  
+   - Lag_1, Lag_2 (previous day prices)  
+   - MA_5, MA_20 (short and medium-term trends)  
+   - RSI (14-day momentum indicator)  
+
+4. **Model Development:**  
+   - **Regression:** Random Forest Regressor  
+   - **Classification:** Logistic Regression  
+
+5. **Evaluation:**  
+   - Regression: MAE, MAPE  
+   - Classification: Accuracy, Precision, Recall, F1-Score  
+
+6. **Visualization:**  
+   - Actual vs Predicted Prices  
+   - RSI chart with thresholds  
+   - MA crossover signals  
+   - Volatility and return trends  
+   - Daily accuracy percentage bars  
+
+7. **Deployment:**  
+   - Streamlit Web App hosted online  
+   - GitHub Actions for continuous updates
+
+![workflow](https://github.com/user-attachments/assets/133c018b-15d0-4d11-8b9a-ae6b9c56ce97)
+
 
 ---
 
-## 📌 Project Scope
-- **Data Source**:  
-  - Historical stock data collected using `yfinance` (Yahoo Finance).
-  - Open, high, low, close prices, and volume data.
-- **Limitations**:
-  - Does not consider news or external factors.
-  - Focused on a limited set of stocks.
-  - Predictions are for short term only.
-- **Constraints**:
-  - Models limited to Linear Regression, Random Forest, and Logistic Regression.
-  - Only public APIs used.
+## 📌 Key Features
+
+- Lag Values: Historical close prices (Lag_1, Lag_2)
+- Moving Averages: 5-day and 20-day trend indicators
+- RSI: Tracks price momentum and reversal signals
+- Bollinger Bands: Measure volatility and deviation
+- Interactive Plots: Plotly-based dynamic charting
+- Daily Accuracy: Bar plots highlight prediction quality
 
 ---
 
-## 🧩 High-Level Methodology
+## 📦 Data Source
 
-![workflow](https://github.com/user-attachments/assets/302a0eac-bef0-48ce-9aa7-e298c797c52a)
-
-1. **Data Collection**: Using `yfinance` API.
-2. **Data Cleaning**: Handling missing values, removing duplicates.
-3. **Exploratory Data Analysis (EDA)**:  
-   Visualize trends with plots, moving averages, and heatmaps.
-4. **Feature Engineering**:  
-   Create lag values, moving averages, RSI, and Bollinger Bands.
-5. **Model Building**:  
-   - **Regression Models**: Linear Regression, Random Forest
-   - **Classification Model**: Logistic Regression
-6. **Model Evaluation**:
-   - Regression: MAE (Mean Absolute Error)
-   - Classification: Accuracy, Precision, Recall, F1-Score
-7. **Deployment**:  
-   An interactive **Streamlit** web app where users can input stock tickers and get predictions.
+- **API**: Yahoo Finance (`yfinance` library)
+- **Data Type**: Time-series (OHLC + Volume)
+- **Target Variables**:  
+  - `Target_Price` (for regression)  
+  - `Target_UpDown` (for classification)  
 
 ---
 
-## ⚙️ Tools and Technologies
-- **Programming Language**: Python
-- **Notebook/IDE**:
-  - Jupyter Notebook
-  - Visual Studio Code (VS Code)
-  - Axel DICE
-  - Google Colab (for training models)
-- **Libraries**:
-  - `pandas`, `numpy` (Data processing)
-  - `matplotlib`, `seaborn`, `plotly` (Visualization)
-  - `scikit-learn` (Machine Learning)
-- **Deployment**:
-  - Streamlit (Web App)
-  - GitHub (Version Control)
-  - GitHub Actions (CI/CD Automation)
+## ⚙️ Tools & Technologies
+
+- **Language:** Python
+- **IDE/Notebook:** VS Code, Jupyter, Axel DICE, Google Colab
+- **Libraries:**  
+  - `pandas`, `numpy` – Data processing  
+  - `plotly`, `matplotlib`, `seaborn` – Visualization  
+  - `scikit-learn` – Machine learning  
+  - `streamlit` – Web dashboard  
+  - `yfinance`, `appdirs` – Data and utility support
+
+- **Deployment & Collaboration:**  
+  - Streamlit (Web app hosting)  
+  - GitHub & GitHub Actions (CI/CD pipeline)
 
 ---
 
-## 🚀 How to Run the Project
+## 🚀 Getting Started
 
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/Vignesh-72/Stock-Price-Prediction-Model.git
-   cd Stock-Price-Prediction-Model
-   ```
+1. **Clone the repository**  
+```bash
+git clone https://github.com/Vignesh-72/Stock-Price-Prediction-Model.git
+cd Stock-Price-Prediction-Model
+```
 
-2. **Install Dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+2. **Install dependencies**  
+```bash
+pip install -r requirements.txt
+```
 
-3. **Run the Streamlit App**
-   ```bash
-   streamlit run app.py
-   ```
+3. **Run the application**  
+```bash
+streamlit run app.py
+```
 
-4. **Usage**
-   - Enter the stock ticker symbol (e.g., `AAPL`, `GOOGL`) in the Streamlit dashboard.
-   - View predictions for price direction and next day's closing price.
+4. **Usage**  
+- Enter a stock ticker (e.g., AAPL, GOOGL)  
+- View predictions, trends, and trading recommendations
 
 ---
+
+## 🌐 Live App
+
+👉 Access the deployed app here: [Stock Price Prediction Dashboard](https://stock-price-prediction-hybridmodel.streamlit.app/)
+
+---
+
+## 👥 Project Team
+
+- **Vignesh S** – Model Building & Training  
+- **Umar Farooq** – Front-End Design & Exploratory Data Analysis  
+- **Vikram** – Data Cleaning & Feature Engineering  
+- **Sheshathri** – Documentation & Reporting
+
+---
+
+> ⚠️ **Academic Integrity Notice**  
+> This project was created by Vignesh S and team for educational purposes. Unauthorized copying, reuse, or academic submission is strictly forbidden.
+
