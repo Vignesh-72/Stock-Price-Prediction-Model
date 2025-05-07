@@ -58,7 +58,6 @@ This tool serves as a decision support system for analysts and traders, using hi
 
 7. **Deployment:**  
    - Streamlit Web App hosted online  
-   - GitHub Actions for continuous updates
 
 ![workflow](https://github.com/user-attachments/assets/133c018b-15d0-4d11-8b9a-ae6b9c56ce97)
 
@@ -97,7 +96,7 @@ This tool serves as a decision support system for analysts and traders, using hi
   - `streamlit` – Web dashboard  
   - `yfinance`, `appdirs` – Data and utility support
 
-- **Deployment & Collaboration:**  
+- **Deployment :**  
   - Streamlit (Web app hosting)  
 
 ---
