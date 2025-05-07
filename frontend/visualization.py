@@ -413,5 +413,56 @@ def render_stock_visualizations(results):
         except Exception as e:
             st.error(f"Error calculating metrics: {str(e)}")
 
+        st.markdown("---")
+        st.subheader("Project Team")
+        st.markdown("""
+        <style>
+        .team-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .team-member {
+            flex: 1;
+            min-width: 200px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        .member-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #4FC3F7;
+        }
+        .member-role {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        st.markdown("""
+        <div class="team-container">
+            <div class="team-member">
+                <div class="member-name">Vignesh S</div>
+                <div class="member-role">Model Building & Training</div>
+            </div>
+            <div class="team-member">
+                <div class="member-name">Umar Farooq V H</div>
+                <div class="member-role">Front-End Design & Exploratory Data Analysis</div>
+            </div>
+            <div class="team-member">
+                <div class="member-name">Vikram M</div>
+                <div class="member-role">Data Cleaning & Feature Engineering</div>
+            </div>
+            <div class="team-member">
+                <div class="member-name">Sheshathri M</div>
+                <div class="member-role">Documentation & Reporting</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     except Exception as e:
         st.error(f"Visualization error: {str(e)}")
