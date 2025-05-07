@@ -143,5 +143,5 @@ streamlit run app.py
 ---
 
 > ⚠️ **Academic Integrity Notice**  
-> This project was created by Vignesh S and team for educational purposes. Unauthorized copying, reuse, or academic submission is strictly forbidden.
+> This project was developed by **Vignesh S and Team** for academic use at **Priyadarshini Engineering College**. Unauthorized copying, modification, or submission of this project as your own academic or commercial work is strictly prohibited..
 
