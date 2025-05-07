@@ -30,7 +30,7 @@ This tool serves as a decision support system for analysts and traders, using hi
 
 ## 🧠 Methodology
 1. **Data Collection:**  
-   - Historical stock data fetched using `yfinance` API.
+   - Historical stock data fetched using [`yfinance`](https://pypi.org/project/yfinance/) API.
 
 2. **Data Preprocessing:**  
    - Handle missing values (dropna) from rolling calculations.
