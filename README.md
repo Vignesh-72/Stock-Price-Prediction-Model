@@ -30,7 +30,7 @@ This tool serves as a decision support system for analysts and traders, using hi
 
 ## 🧠 Methodology
 1. **Data Collection:**  
-   - Historical stock data fetched using `yfinance` API.
+   - Historical stock data fetched using [`yfinance`](https://pypi.org/project/yfinance/) API.
 
 2. **Data Preprocessing:**  
    - Handle missing values (dropna) from rolling calculations.
@@ -58,7 +58,6 @@ This tool serves as a decision support system for analysts and traders, using hi
 
 7. **Deployment:**  
    - Streamlit Web App hosted online  
-   - GitHub Actions for continuous updates
 
 ![workflow](https://github.com/user-attachments/assets/133c018b-15d0-4d11-8b9a-ae6b9c56ce97)
 
@@ -97,9 +96,8 @@ This tool serves as a decision support system for analysts and traders, using hi
   - `streamlit` – Web dashboard  
   - `yfinance`, `appdirs` – Data and utility support
 
-- **Deployment & Collaboration:**  
+- **Deployment :**  
   - Streamlit (Web app hosting)  
-  - GitHub & GitHub Actions (CI/CD pipeline)
 
 ---
 
@@ -118,7 +116,7 @@ pip install -r requirements.txt
 
 3. **Run the application**  
 ```bash
-streamlit run app.py
+streamlit run streamlit_app.py
 ```
 
 4. **Usage**  

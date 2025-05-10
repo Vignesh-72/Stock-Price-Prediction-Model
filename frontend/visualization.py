@@ -520,5 +520,12 @@ def render_stock_visualizations(results):
             </div>
         </div>
         """, unsafe_allow_html=True)
+        st.markdown("---")
+        st.warning(""" 
+        **Disclaimer:**  
+        This is a non-commercial academic project. Predictions are for educational purposes only and may involve financial risks if used for trading.  
+        Please consult a financial advisor before making any investment decisions.
+        """)
+        
     except Exception as e:
         st.error(f"Visualization error: {str(e)}")
