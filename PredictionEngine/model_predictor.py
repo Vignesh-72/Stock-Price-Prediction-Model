@@ -55,6 +55,6 @@ class StockPredictor:
                 'accuracy': accuracy_score(y_test_clf, clf_preds),
                 'actual': y_test_clf,
                 'predicted': clf_preds,
-                'proba': clf_proba  # 🔥 Enables ROC curve
+                'proba': clf_proba  
             }
         }
