@@ -2,7 +2,9 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
-from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
+from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score , confusion_matrix, roc_curve, auc
+import plotly.figure_factory as ff
+
 
 def render_stock_visualizations(results):
     """Render stock prediction visualizations with focus on trading decisions"""
@@ -412,7 +414,61 @@ def render_stock_visualizations(results):
 
         except Exception as e:
             st.error(f"Error calculating metrics: {str(e)}")
+        # Add Confusion Matrix and ROC Curve
+        st.subheader("Confusion Matrix & ROC Curve")
+        try:
+            y_true = eval_data['classification']['actual']
+            y_pred = eval_data['classification']['predicted']
 
+            if isinstance(y_true, pd.Series) and isinstance(y_pred, (np.ndarray, list)):
+                # Ensure both are aligned by index
+                y_true = y_true.reset_index(drop=True)
+                y_pred = pd.Series(y_pred).reset_index(drop=True)
+
+                # Confusion Matrix
+                cm = confusion_matrix(y_true, y_pred)
+                cm_labels = ["Down (0)", "Up (1)"]
+                z = cm.tolist()
+
+                fig_cm = ff.create_annotated_heatmap(
+                    z=z,
+                    x=cm_labels,
+                    y=cm_labels,
+                    colorscale='Blues',
+                    showscale=True,
+                    hoverinfo="z"
+                )
+                fig_cm.update_layout(
+                    title_text="Confusion Matrix",
+                    font=dict(color='white'),
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    plot_bgcolor='rgba(0,0,0,0)'
+                )
+                st.plotly_chart(fig_cm, use_container_width=True)
+
+                # ROC Curve
+                if 'proba' in eval_data['classification']:  # Only if probability scores available
+                    y_proba = eval_data['classification']['proba']
+                    fpr, tpr, _ = roc_curve(y_true, y_proba)
+                    roc_auc = auc(fpr, tpr)
+
+                    fig_roc = go.Figure()
+                    fig_roc.add_trace(go.Scatter(x=fpr, y=tpr, mode='lines', name='ROC Curve'))
+                    fig_roc.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode='lines', name='Random', line=dict(dash='dash')))
+
+                    fig_roc.update_layout(
+                        title=f"ROC Curve (AUC = {roc_auc:.2f})",
+                        xaxis_title='False Positive Rate',
+                        yaxis_title='True Positive Rate',
+                        font=dict(color='white'),
+                        paper_bgcolor='rgba(0,0,0,0)',
+                        plot_bgcolor='rgba(0,0,0,0)'
+                    )
+                    st.plotly_chart(fig_roc, use_container_width=True)
+        except Exception as e:
+            
+            st.error(f"Error displaying confusion matrix or ROC curve: {str(e)}")
+            
         st.markdown("---")
         st.subheader("Project Team")
         st.markdown("""
