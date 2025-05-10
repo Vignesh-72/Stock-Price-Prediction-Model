@@ -40,10 +40,11 @@ class StockPredictor:
         }
     
     def evaluate(self, X_test, y_test_reg, y_test_clf) -> dict:
-        """Evaluate model performance"""
+
         reg_preds = self.reg_model.predict(X_test)
         clf_preds = self.clf_model.predict(X_test)
-        
+        clf_proba = self.clf_model.predict_proba(X_test)[:, 1]  # Probability for class 1 (UP)
+    
         return {
             'regression': {
                 'mae': mean_absolute_error(y_test_reg, reg_preds),
@@ -53,6 +54,7 @@ class StockPredictor:
             'classification': {
                 'accuracy': accuracy_score(y_test_clf, clf_preds),
                 'actual': y_test_clf,
-                'predicted': clf_preds
+                'predicted': clf_preds,
+                'proba': clf_proba  # 🔥 Enables ROC curve
             }
         }
