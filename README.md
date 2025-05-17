@@ -4,6 +4,11 @@
 [![Live App](https://img.shields.io/badge/🚀%20Launch%20App-Streamlit-green?style=for-the-badge)](https://stock-price-prediction-hybridmodel.streamlit.app/)
 [![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff)](#)
 
+## 🌐 Live App
+
+👉 Access the deployed app here: [Stock Price Prediction Dashboard](https://stock-price-prediction-hybridmodel.streamlit.app/)
+
+
 ## 📈 Project Overview
 
 **Project Title:** Cracking the Market Code with AI-Driven Stock Price Prediction using Time Series Analysis
@@ -122,12 +127,6 @@ streamlit run streamlit_app.py
 4. **Usage**  
 - Enter a stock ticker (e.g., AAPL, GOOGL)  
 - View predictions, trends, and trading recommendations
-
----
-
-## 🌐 Live App
-
-👉 Access the deployed app here: [Stock Price Prediction Dashboard](https://stock-price-prediction-hybridmodel.streamlit.app/)
 
 ---
 
